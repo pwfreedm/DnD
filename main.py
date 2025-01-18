@@ -3,7 +3,7 @@ from tkinter import *
 
 def main():
     gui = GUI("dnd character manager")
-    gui.canvas.mainloop()
+    gui.root.mainloop()
 
 
 
