@@ -1,10 +1,10 @@
 import tkinter as tk
-from character import *
-# a subclass of Canvas for dealing with resizing of windows
+from model import InternalState
 
-def_background = "#36393e"
+dm_bg = "#36393e"
 light_grey = "#D3D3D3"
 text_font = ("Righteous", 12)
+
 class ResizingCanvas(tk.Canvas):
     def __init__(self,parent,**kwargs):
         tk.Canvas.__init__(self,parent,**kwargs)
@@ -26,28 +26,35 @@ class ResizingCanvas(tk.Canvas):
 class GUI:
     def __init__ (self, name: str):
         self.root = tk.Tk()
-        self.frame = tk.Frame(self.root)
-        self.canvas = ResizingCanvas(self.frame, width=1920, height=1080, background=def_background, highlightthickness=0)
+        self.frame = tk.Frame(self.root, 
+                              bg=dm_bg, 
+                              width=1920, 
+                              height=1080)
+        self.canvases: list[CharacterPanel] = []
 
-        self.canvas.grid()
         self.frame.grid()
         self.draw_interface()
         self.root.title(name)
-        self.canvas.addtag_all("window_resize")
 
-    def add_character(self):
+    def new_char_panel(self):
+        self.canvases.append(CharacterPanel())
+        self.canvases[len(self.canvases) - 1].grid(columnspan=5, rowspan=5, column=0, row=0)
         print("Button clicked")
 
     def create_button (self, text: str, command) -> tk.Button:
         return tk.Button(self.root, 
                         text=text, 
                         command=command,
-                        bg=def_background,
+                        bg=dm_bg,
                         fg=light_grey,
                         borderwidth=0)
         
 
     def draw_interface (self):
-       add_menu = self.create_button('+', self.add_character)
-       add_menu.grid(row=5, column=5)
+       add_menu = self.create_button('+', self.new_char_panel)
+       add_menu.place(anchor='se',relx=0.996, rely=0.995)
 
+class CharacterPanel (ResizingCanvas):
+    def __init__ (self, root):
+        self._canvas = ResizingCanvas(root, bg=light_grey, width=200, height=1000, highlightborder=0)
+        self._canvas.addtag_all("window_resize")

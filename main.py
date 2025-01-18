@@ -1,9 +1,9 @@
-from gui import * 
+from controller import Controller
 from tkinter import *
 
 def main():
-    gui = GUI("dnd character manager")
-    gui.root.mainloop()
+    con = Controller("dnd character manager")
+    con.init_gui()
 
 
 

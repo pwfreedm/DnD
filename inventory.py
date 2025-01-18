@@ -28,9 +28,18 @@ class Item:
 #represents an inventory in dnd
 class Inventory: 
     def __init__ (self, limit: int = 0, items: list[Item] = []):
-        self._items = items
-        self._limit = limit
-        self._cur_weight = 0
+        self._items: list[Item] = items
+        self._limit: int = limit
+        self._cur_weight: int = 0
+    
+    def get_items (self) -> list[Item]:
+        return self._items
+    
+    def get_max_weight (self):
+        return self._limit
+    
+    def get_cur_weight (self):
+        return self._cur_weight
     
     def add_item(self, item: Item):
         self._cur_weight += item.weight()
