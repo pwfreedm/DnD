@@ -2,11 +2,8 @@ from gui import *
 from tkinter import *
 
 def main():
-    root = Tk()
-    frame = Frame(root)
-    frame.pack(fill=BOTH, expand=YES)
-    canvas = Canvas(Frame)
-    canvas.pack(fill=BOTH, expand=YES)
+    gui = GUI("dnd character manager")
+    gui.canvas.mainloop()
 
 
 
