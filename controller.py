@@ -15,6 +15,6 @@ class Controller:
         self._state = InternalState()
 
     def init_gui (self):
-        self._gui.root.mainloop()
+        self._gui.display_msg()
         
 
