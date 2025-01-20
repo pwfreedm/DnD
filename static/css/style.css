@@ -1,6 +1,37 @@
-h1 {
-    border: 2px #eee solid;
-    color: brown;
-    text-align: center;
-    padding: 10px;
+body {
+    background-color: #313338;
+    max-width: 1920px;
+    max-height: 1080px;
+
+    width: 100vw; 
+    height: 100vw;
+
+}
+
+/* the top level grid that organizes the page */
+.toplevel {
+    display: grid;
+    max-width: 100vh; 
+    max-height: 100vh;
+    
+    gap: 10px 40px;
+    color: red;
+    justify-content: flex-start;
+    grid-template-columns: 32% 32% 32% 4%;
+    grid-template-rows: 98% 2%;
+}
+
+.toplevel > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 30px;
+}
+.toplevel .char_wheels {
+    grid-column-start: span 4;
+    grid-row-start: 1;
+}
+
+.toplevel .bottom_row {
+    grid-row-start: 2;
+    grid-column-start: 4;
 }
