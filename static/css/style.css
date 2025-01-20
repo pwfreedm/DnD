@@ -8,30 +8,27 @@ body {
 
 }
 
-/* the top level grid that organizes the page */
-.toplevel {
-    display: grid;
-    max-width: 100vh; 
-    max-height: 100vh;
+.container-fluid {
+    color: lightgrey;
+}
+.container-fluid .char_space {
+    height: 95vw;
+    color: lightgrey; 
+    border: 1px; 
+    border-color: lightgrey;
+    border-style:dashed;
+    padding: 10px 5px;
     
-    gap: 10px 40px;
-    color: red;
-    justify-content: flex-start;
-    grid-template-columns: 32% 32% 32% 4%;
-    grid-template-rows: 98% 2%;
 }
 
-.toplevel > div {
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 30px;
-}
-.toplevel .char_wheels {
-    grid-column-start: span 4;
-    grid-row-start: 1;
+.container-fluid .bottom_row .char_btn .add_char {
+    height: 5vw;
+    color: lightgrey;
+    border-color: lightgrey;
+    border-width: 1pt;
 }
 
-.toplevel .bottom_row {
-    grid-row-start: 2;
-    grid-column-start: 4;
+.container-fluid .bottom_row .char_btn .add_char:hover {
+    color: #313338;
+    background-color: lightgrey;
 }
