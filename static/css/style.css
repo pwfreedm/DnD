@@ -1,10 +1,10 @@
 body {
     background-color: #313338;
-    max-width: 1920px;
-    max-height: 1080px;
+    max-width: 100vw;
+    max-height: 100vh;
 
     width: 100vw; 
-    height: 100vw;
+    height: 100vh;
 
 }
 
@@ -12,7 +12,8 @@ body {
     color: lightgrey;
 }
 .container-fluid .char_space {
-    height: 95vw;
+    height: 96vh;
+    width: 100vw;
     color: lightgrey; 
     border: 1px; 
     border-color: lightgrey;
@@ -21,14 +22,17 @@ body {
     
 }
 
-.container-fluid .bottom_row .char_btn .add_char {
-    height: 5vw;
+.add_char {
+    height: 4vh;
+    width: 3vw;
+    font-size: 2vh;
     color: lightgrey;
     border-color: lightgrey;
     border-width: 1pt;
+    align-items: flex-start;
 }
 
-.container-fluid .bottom_row .char_btn .add_char:hover {
+.add_char:hover {
     color: #313338;
     background-color: lightgrey;
 }
