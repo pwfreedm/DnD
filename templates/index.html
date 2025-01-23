@@ -17,10 +17,15 @@
     <div class="row bottom_row">
         <!-- this 11 width div is padding for possible future use -->
         <div class="col-xs-11 col-sm-11"></div>
-        <div class="col-xs-1 col-sm-1 char_btn">
-            <form action="/acs" method="post">
-            <button type="submit" name="add_char" class="btn float-right add_char">+</button>
-            </form>
+        <div class="col-xs-1 col-sm-1 add_menu">
+            <div class="dropup">
+                <button name="add_btn" class="dropbtn float-right add_btn" data-bs-reference="float-right">+</button>
+                <div class="dropup-content">
+                    <a href="#">testing a very long sentence to see how the menu reacts.</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </div>
+            </div>
         </div>
     </div>
 

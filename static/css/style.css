@@ -11,6 +11,7 @@ body {
 .container-fluid {
     color: lightgrey;
 }
+
 .container-fluid .char_space {
     height: 96vh;
     width: 100vw;
@@ -20,19 +21,4 @@ body {
     border-style:dashed;
     padding: 10px 5px;
     
-}
-
-.add_char {
-    height: 4vh;
-    width: 3vw;
-    font-size: 2vh;
-    color: lightgrey;
-    border-color: lightgrey;
-    border-width: 1pt;
-    align-items: flex-start;
-}
-
-.add_char:hover {
-    color: #313338;
-    background-color: lightgrey;
 }
