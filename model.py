@@ -8,6 +8,16 @@ class Character(db.Model):
     cur_life: Mapped[int] = mapped_column()
     carry_weight: Mapped[int] = mapped_column()
 
+    def __init__ (self, name, life, weight):
+        self.name = name
+        self.max_life = life
+        self.cur_life = life
+        self.carry_weight = weight
+    
+    def __str__ (self):
+        return 'name: ' + self.name + ' life: (' + str(self.cur_life) + '/' + str(self.max_life) + " carry weight: " + str(self.carry_weight)
+
+
 class Item (db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
     name: Mapped[str] = mapped_column(unique=False)

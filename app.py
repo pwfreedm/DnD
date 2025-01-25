@@ -1,22 +1,33 @@
-from markupsafe import escape
-import flask as fl
+from flask import Flask, render_template, request
 from db import db
 from model import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.sql import text, select
 
-app = fl.Flask(__name__)
+app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dnd.db'
 
 db.init_app(app)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return fl.render_template('index.html')
+    if request.method == 'POST':
+        char = Character(request.form['name'], request.form['hp'], request.form['weight'])
+        db.session.add(char)
+        db.session.commit()
 
-@app.post("/acs")
+        print(db.session.query(Character).all())
+        
+        #DEBUG CODE PLEASE REMOVE
+        with app.app_context():
+            db.drop_all()
+            db.create_all()
+        
+    return render_template('index.html')
+
 def add_character():
+    print("Form Submitted. ")
     return index()
 
 if __name__ == '__main__':

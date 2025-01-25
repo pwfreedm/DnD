@@ -11,20 +11,13 @@
             <div class="dropdown">
                 <button name="add-char" id="add-char" class="btn add-char" type="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">+</button>    
-                <div class=" dropdown-menu dropdown-content" aria-labelledby="add-char">
-                    <div class="form-item">
-                        <input type="text" class="new-char-data dropdown-item" id="nc-name" placeholder="Name">
-                    </div>
-
-                    <div class="form-item">
-                        <input type="number" class="new-char-data dropdown-item" id="nc-hp" placeholder="Max HP">
-                    </div>
-
-                    <div class="form-item">
-                        <input type="number" class="new-char-data dropdown-item" id="nc-weight" placeholder="Carry Weight">
-                    </div>
-
-                    <button type="submit" class="submit btn btn-primary dropdown-item">Create Character</button>
+                <div class="dropdown-menu dropdown-content" aria-labelledby="add-char">
+                    <form method="post" action="/">
+                        <input type="text" name="name" class="new-char-data dropdown-item" id="nc-name" placeholder="Name">
+                        <input type="number" name="hp" class="new-char-data dropdown-item" id="nc-hp" placeholder="Max HP">
+                        <input type="number" name="weight" class="new-char-data dropdown-item" id="nc-weight" placeholder="Carry Weight">
+                        <button type="submit" name="submit_new_char" class="submit btn btn-primary dropdown-item">Create Character</button>
+                    </form>
                 </div>
 
             </div>
