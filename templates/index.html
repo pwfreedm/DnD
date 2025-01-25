@@ -6,29 +6,30 @@
 
 {% block body %}
 <div class="container-fluid">
-    <div class="row char_space">
-        <div class="col-xs-12 col-sm-12">
-            <div class="panel">
-                this is where all the character content will go
-            </div>
-            
-        </div>
-    </div>
-    <div class="row bottom_row">
-        <!-- this 11 width div is padding for possible future use -->
-        <div class="col-xs-11 col-sm-11"></div>
-        <div class="col-xs-1 col-sm-1 add_menu">
-            <div class="dropup">
-                <button name="add_btn" class="dropbtn float-right add_btn" data-bs-reference="float-right">+</button>
-                <div class="dropup-content">
-                    <a href="#">testing a very long sentence to see how the menu reacts.</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="row char-space">
+        <div class="col-xs-3 col-sm-3 char">
+            <div class="dropdown">
+                <button name="add-char" id="add-char" class="btn add-char" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">+</button>    
+                <div class=" dropdown-menu dropdown-content" aria-labelledby="add-char">
+                    <div class="form-item">
+                        <input type="text" class="new-char-data dropdown-item" id="nc-name" placeholder="Name">
+                    </div>
 
+                    <div class="form-item">
+                        <input type="number" class="new-char-data dropdown-item" id="nc-hp" placeholder="Max HP">
+                    </div>
+
+                    <div class="form-item">
+                        <input type="number" class="new-char-data dropdown-item" id="nc-weight" placeholder="Carry Weight">
+                    </div>
+
+                    <button type="submit" class="submit btn btn-primary dropdown-item">Create Character</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

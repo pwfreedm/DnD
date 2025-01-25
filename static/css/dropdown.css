@@ -1,0 +1,66 @@
+/* overall menu styling */
+.dropdown {
+    position: relative; 
+    display: block;
+}
+
+/* placement of menu (hide until hovered) */
+.dropdown-content {
+    display: none;
+    min-width: 160px;
+}
+
+
+/* display the dropdown menu content while the button is being hovered */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* button that the dropdown is attached to */
+.add-char {
+    height: 4vh;
+    width: 23vw;
+    border: none; 
+    font-size: 3vh;
+    color: lightgrey;
+}
+
+/* styling for dropdown content*/
+.dropdown-content {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.932);
+    border: inherit; 
+}
+
+/* styling for each individual item in the dropdown */
+.dropdown-item {
+    text-align: center; 
+}
+
+/* Annoying workaround to remove the arrows from numeric form inputs */ 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox needed to be special */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+/* end annoying workaround */
+
+
+
+.submit {
+    background-color: rgba(94, 219, 94, 0.856);
+    color: #313338;
+    width: 50%;
+    margin-left: 25%;
+}
+
+.dropdown-item:active, .dropdown-item:focus, .submit:click {
+    background-color: rgba(255, 255, 255, 0.932);
+    outline: none;
+    border: none;  
+}

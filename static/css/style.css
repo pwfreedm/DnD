@@ -12,13 +12,22 @@ body {
     color: lightgrey;
 }
 
-.container-fluid .char_space {
+.container-fluid .char-space {
     height: 96vh;
     width: 100vw;
     color: lightgrey; 
-    border: 1px; 
-    border-color: lightgrey;
-    border-style:dashed;
-    padding: 10px 5px;
+    padding: 5px 5px;
     
 }
+
+.char {
+    height: 100%;
+    width: 24vw;
+    border: 0.3vh;
+    border-color: rgba(211, 211, 211, 0.521);
+    border-style: solid;
+    border-radius: 2vh;
+    padding: 5px 15px;
+    align-items: center;
+}
+
