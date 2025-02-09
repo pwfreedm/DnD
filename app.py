@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
+from sqlalchemy import select, exists, func
 from db import db
 from model import *
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text, select
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dnd.db'
@@ -22,7 +22,7 @@ def index():
     return render_template('index.html')
 
 def add_character (form):
-    char = Character(form['name'], form['hp'], form['weight'])
+    char = Character(form['name'].title(), form['hp'], form['weight'])
     db.session.add(char)
     db.session.commit()
 
@@ -37,11 +37,11 @@ def add_item (form):
         item.hit_bonus = form['hit_bonus']
         item.dmg_bonus = form['dmg_bonus']
     
-    #TODO: something of the form "if db contains the item above, don't readd"
+    else:
+        item.quantity = form['quantity']
+    #TODO: how to make sure this properly links up with Inventory
+    # probably just end up making the form auto-include the character name?
 
-    #TODO: else, generate an ID (equal to number of rows in table) and 
-    #       set the item's id to that
-    #       add item with new id to db
 
 if __name__ == '__main__':
     with app.app_context():

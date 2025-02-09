@@ -1,42 +1,88 @@
-from db import db
-from sqlalchemy import ForeignKey
+from db import DB_Base, db, count_rows
+from sqlalchemy import ForeignKey, select
 from sqlalchemy.orm import Mapped, mapped_column
+import json
 
-class Character(db.Model):
+
+class Character(DB_Base):
+    __tablename__ = 'characters'
+
     name: Mapped[str] = mapped_column(primary_key=True)
     max_life: Mapped[int] = mapped_column()
-    cur_life: Mapped[int] = mapped_column()
     carry_weight: Mapped[int] = mapped_column()
 
-    def __init__ (self, name, life, weight):
+    def __init__ (self, name: str, life, weight):
         self.name = name
         self.max_life = life
-        self.cur_life = life
         self.carry_weight = weight
 
-class Item (db.Model):
-    #TODO: add a method to this class that checks if an item that currently exists in the db is identical to one passed in (except ID)
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    def __repr__ (self):
+        return f'{{ "name":"{self.name}", "max_life":{self.max_life}, "carry_weight":{self.carry_weight} }}'
+    
+
+class Weapon (DB_Base):
+    __tablename__ = 'weapons'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
+    name: Mapped[str] = mapped_column()
     weight: Mapped[int] = mapped_column()
-    #TODO: limit type to one of ['item', 'armor', 'weapon']
-    type: Mapped[str] = mapped_column(nullable=False)
     hit_bonus: Mapped[int] = mapped_column()
     dmg_bonus: Mapped[int] = mapped_column()
-    base_ac: Mapped[int] = mapped_column()
 
-    def __init__ (self, id, name, weight, type, hit_bonus = None, dmg_bonus = None, base_ac = None):
-        self.id = id
+    def __init__ (self, name, owner, weight, hit_bonus, dmg_bonus):
+        self.id = count_rows(Weapon)
+        self.owner = owner
         self.name = name
-        self.weight = weight
-        self.type = type
+        self.weight = weight 
         self.hit_bonus = hit_bonus
         self.dmg_bonus = dmg_bonus
+
+    def __repr__ (self):
+        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "hit_bonus":{self.hit_bonus}, "dmg_bonus":{self.dmg_bonus} }}'
+    
+
+class Armor (DB_Base):
+    __tablename__ = 'armors'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
+    name: Mapped[str] = mapped_column()
+    weight: Mapped[int] = mapped_column()
+    base_ac: Mapped[int] = mapped_column()
+
+    def __init__ (self, name, owner, weight, base_ac):
+        self.id = count_rows(Armor)
+        self.owner = owner
+        self.name = name
+        self.weight = weight
         self.base_ac = base_ac
 
-class Inventory(db.Model):
-    #transaction id to optimize inventory updates
-    t_id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(None, ForeignKey('character.name'))
-    item_id: Mapped[int] = mapped_column(None, ForeignKey('item.id'))
+    def __repr__ (self):
+        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "ac":{self.base_ac} }}'
+    
+class Item (DB_Base):
+    __tablename__ = 'items'
+
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
+    name: Mapped[str] = mapped_column(unique=True)
+    weight: Mapped[int] = mapped_column()
     quantity: Mapped[int] = mapped_column()
+
+    def __init__ (self, name, owner, weight, quantity):
+        self.id = count_rows(Item)
+        self.owner = owner
+        self.name = name
+        self.weight = weight
+        self.quantity = quantity
+
+    def __repr__ (self):
+        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "quantity":{self.quantity} }}'
+    
+def inventory_json (name: str):
+    armors = db.session.execute(select(Armor).where(Armor.owner == name)).scalars()
+    weapons = db.session.execute(select(Weapon).where(Weapon.owner == name)).scalars()
+    items = db.session.execute(select(Item).where(Item.owner == name)).scalars()
+
+    #TODO: integrate json header so that json dumps can be easily specified

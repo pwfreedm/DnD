@@ -6,3 +6,7 @@ class DB_Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=DB_Base)
 
+def count_rows (cl_name: object) -> int:
+    return db.session.query(cl_name).count()
+
+
