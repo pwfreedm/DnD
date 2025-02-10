@@ -1,88 +1,93 @@
-from db import DB_Base, db, count_rows
+from dataclasses import dataclass
+from typing import List
+from db import db
 from sqlalchemy import ForeignKey, select
 from sqlalchemy.orm import Mapped, mapped_column
-import json
+from flask import jsonify
+from flask_sqlalchemy import SQLAlchemy
 
+name_len: int = 50 
+item_len: int = 100
 
-class Character(DB_Base):
-    __tablename__ = 'characters'
+@dataclass
+class Stats (db.Model):
+    __tablename__ = 'stats'
 
-    name: Mapped[str] = mapped_column(primary_key=True)
-    max_life: Mapped[int] = mapped_column()
-    carry_weight: Mapped[int] = mapped_column()
+    owner: str = db.Column(db.String(name_len), ForeignKey("character.name"), primary_key=True)
+    max_hp: int = db.Column(db.Integer)
+    carry_weight: int = db.Column(db.Integer)
 
-    def __init__ (self, name: str, life, weight):
-        self.name = name
-        self.max_life = life
-        self.carry_weight = weight
+    def __init__ (self, name, max_hp, carry_weight):
+        self.owner = name
+        self.max_hp = max_hp
+        self.carry_weight = carry_weight
+@dataclass
+class Weapon (db.Model):
+    __tablename__ = 'weapon'
 
-    def __repr__ (self):
-        return f'{{ "name":"{self.name}", "max_life":{self.max_life}, "carry_weight":{self.carry_weight} }}'
-    
-
-class Weapon (DB_Base):
-    __tablename__ = 'weapons'
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
-    name: Mapped[str] = mapped_column()
-    weight: Mapped[int] = mapped_column()
-    hit_bonus: Mapped[int] = mapped_column()
-    dmg_bonus: Mapped[int] = mapped_column()
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    owner: str = db.Column(db.String(name_len), ForeignKey("character.name"), nullable=False)
+    name: str = db.Column(db.String(item_len))
+    weight: int = db.Column(db.Integer)
+    hit_bonus: int = db.Column(db.Integer)
+    dmg_bonus: int = db.Column(db.Integer)
 
     def __init__ (self, name, owner, weight, hit_bonus, dmg_bonus):
-        self.id = count_rows(Weapon)
         self.owner = owner
         self.name = name
         self.weight = weight 
         self.hit_bonus = hit_bonus
         self.dmg_bonus = dmg_bonus
-
-    def __repr__ (self):
-        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "hit_bonus":{self.hit_bonus}, "dmg_bonus":{self.dmg_bonus} }}'
     
+@dataclass
+class Armor (db.Model):
+    __tablename__ = 'armor'
 
-class Armor (DB_Base):
-    __tablename__ = 'armors'
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
-    name: Mapped[str] = mapped_column()
-    weight: Mapped[int] = mapped_column()
-    base_ac: Mapped[int] = mapped_column()
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True) 
+    owner: str = db.Column(db.String(name_len), ForeignKey("character.name"), nullable=False)
+    name: str = db.Column(db.String(item_len))
+    weight: int = db.Column(db.Integer)
+    base_ac: int = db.Column(db.Integer)
 
     def __init__ (self, name, owner, weight, base_ac):
-        self.id = count_rows(Armor)
         self.owner = owner
         self.name = name
         self.weight = weight
         self.base_ac = base_ac
+@dataclass    
+class Item (db.Model):
+    __tablename__ = 'item'
 
-    def __repr__ (self):
-        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "ac":{self.base_ac} }}'
-    
-class Item (DB_Base):
-    __tablename__ = 'items'
-
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    owner: Mapped[str] = mapped_column(ForeignKey("characters.name"), nullable=False)
-    name: Mapped[str] = mapped_column(unique=True)
-    weight: Mapped[int] = mapped_column()
-    quantity: Mapped[int] = mapped_column()
+    id: int = db.Column(db.Integer, primary_key=True, unique=True, autoincrement=True)
+    owner: str = db.Column(db.String(name_len), ForeignKey("character.name"), nullable=False)
+    name: str = db.Column(db.String(item_len))
+    weight: int = db.Column(db.Numeric(2,2))
+    quantity: int = db.Column(db.Integer)
 
     def __init__ (self, name, owner, weight, quantity):
-        self.id = count_rows(Item)
         self.owner = owner
         self.name = name
         self.weight = weight
         self.quantity = quantity
 
-    def __repr__ (self):
-        return f'{{ "id":{self.id}, "owner:":"{self.owner}", "name":"{self.name}", "weight":{self.weight}, "quantity":{self.quantity} }}'
-    
-def inventory_json (name: str):
-    armors = db.session.execute(select(Armor).where(Armor.owner == name)).scalars()
-    weapons = db.session.execute(select(Weapon).where(Weapon.owner == name)).scalars()
-    items = db.session.execute(select(Item).where(Item.owner == name)).scalars()
+@dataclass
+class Character(db.Model):
+    __tablename__ = 'character'
+    __allow_unmapped__ = True #required to get relationships and jsonify to work right
 
-    #TODO: integrate json header so that json dumps can be easily specified
+    name: str = db.Column(db.String(name_len), primary_key=True)
+
+    stats: Stats = db.relationship(Stats)
+    armors: List[Armor] = db.relationship(Armor)
+    weapons: List[Weapon] = db.relationship(Weapon)
+    items: List[Item] = db.relationship(Item)
+
+    def __init__ (self, name: str):
+        self.name = name
+    
+def character_json (name: str):
+    char = Character.query.where(Character.name == name).scalar()
+    return jsonify({name: char})
+
+def party_json ():
+    return jsonify({'Party': [{char.name: char} for char in Character.query.all()]})

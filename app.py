@@ -9,6 +9,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dnd.db'
 
 db.init_app(app)
 
+@app.route("/json/")
+def json ():
+    return party_json()
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -22,8 +25,10 @@ def index():
     return render_template('index.html')
 
 def add_character (form):
-    char = Character(form['name'].title(), form['hp'], form['weight'])
-    db.session.add(char)
+    name = form['name'].title()
+    char = Character(name)
+    stats = Stats(name, form['hp'], form['weight'])
+    db.session.add_all(char, stats)
     db.session.commit()
 
 def add_item (form):
@@ -45,7 +50,7 @@ def add_item (form):
 
 if __name__ == '__main__':
     with app.app_context():
-        db.drop_all()
+        #db.drop_all()
         db.create_all()
         
     app.run(debug=True)
